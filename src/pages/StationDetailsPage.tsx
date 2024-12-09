@@ -7,7 +7,7 @@ import { Card } from "react-bootstrap";
 const mockStationDetails = {
     id: 1,
     title: "Бауманская",
-    pic: "http://127.0.0.1:9000/test/1.jpg",
+    picture_url: "http://127.0.0.1:9000/test/1.jpg",
     description: "«Бауманская» — станция Московского метрополитена на Арбатско-Покровской линии.",
     line_number: "3",
     line_name: "Арбатско-Покровская",
@@ -45,7 +45,7 @@ const StationDetailsPage = () => {
                         <span className="line-number">{station.line_number}</span>
                         <h2 className="station-details-title">{station.title}</h2>
                     </div>
-                    <Card.Img variant="top" src={station.pic || "http://127.0.0.1:9000/test/default_station.jpg"} className="station-large-img" />
+                    <Card.Img variant="top" src={station.picture_url || "http://127.0.0.1:9000/test/default_station.jpg"} className="station-large-img" />
                     <Card.Body>
                         <Card.Text className="station-info">
                             <strong>Описание:</strong> {station.description}

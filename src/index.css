@@ -102,7 +102,7 @@ header {
   display: flex;
   align-items: center;
   height: 100%;
-  margin-left: 20px; /* Добавлен отступ между логотипом и текстом */
+  margin-left: 200px; /* Добавлен отступ между логотипом и текстом */
 }
 
 .header-logo img {
@@ -233,8 +233,8 @@ header {
 }
 
 .station-large-img {
-  width: 100%; /* Ширина изображения */
-  height: 300px; /* Высота фото станции */
+  width: 50%; /* Ширина изображения */
+  min-height: 300px; /* Высота фото станции */
   margin-bottom: 15px; /* Отступ ниже цветного блока */
   object-fit: cover;
   border-radius: 8px;

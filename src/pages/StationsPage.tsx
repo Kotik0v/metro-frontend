@@ -8,7 +8,7 @@ import { Card, Button, Form, Badge, Collapse, Container, Row, Col } from "react-
 interface Station {
     id: number;
     title: string;
-    pic: string;
+    picture_url: string;
     description: string;
     line_number: string;
     line_name: string;
@@ -28,7 +28,7 @@ const mockStations: Station[] = [
     {
         id: 1,
         title: "Бауманская",
-        pic: "http://127.0.0.1:9000/test/1.jpg",
+        picture_url: "http://127.0.0.1:9000/test/1.jpg",
         description: "«Бауманская» — станция Московского метрополитена на Арбатско-Покровской линии.",
         line_number: "3",
         line_name: "Арбатско-Покровская",
@@ -38,7 +38,7 @@ const mockStations: Station[] = [
     {
         id: 2,
         title: "Комсомольская",
-        pic: "http://127.0.0.1:9000/test/2.jpg",
+        picture_url: "http://127.0.0.1:9000/test/2.jpg",
         description: "«Комсомольская» — станция Московского метрополитена на Кольцевой линии.",
         line_number: "5",
         line_name: "Кольцевая",
@@ -48,7 +48,7 @@ const mockStations: Station[] = [
     {
         id: 3,
         title: "Киевская",
-        pic: "http://127.0.0.1:9000/test/3.jpg",
+        picture_url: "http://127.0.0.1:9000/test/3.jpg",
         description: "«Киевская» — станция Московского метрополитена на Арбатско-Покровской и Кольцевой линии.",
         line_number: "4",
         line_name: "Филёвская",
@@ -69,8 +69,8 @@ const StationsPage = () => {
             const response = await fetch("/api/stations/");
             if (!response.ok) throw new Error("Ошибка загрузки данных станций");
             const data = await response.json();
-            setStations(data.stations);
-            setDraftInfo(data.draft_info); // Установка информации о черновике заявки
+            setStations(data || []); // Установка пустого массива по умолчанию
+            setDraftInfo(data.draft_info || { draft_request_id: null, count_stations: 0, stations_in_draft: [] });
         } catch (error) {
             console.error("Fallback to mock data due to API или network error", error);
             setStations(mockStations); // Возврат к mock-данным при ошибке
@@ -82,9 +82,9 @@ const StationsPage = () => {
     }, []);
 
     // Фильтрация станций по введенному тексту
-    const filteredStations = stations.filter((station) =>
+    const filteredStations = stations ? stations.filter((station) =>
         station.title.toLowerCase().includes(search.toLowerCase())
-    );
+    ) : [];
 
     return (
         <div>
@@ -133,7 +133,7 @@ const StationsPage = () => {
                     {filteredStations.map((station) => (
                         <Col md={4} key={station.id} className="mb-4">
                             <Card className="station-card">
-                                <Card.Img variant="top" src={station.pic || "http://127.0.0.1:9000/test/default_station.jpg"} className="station-img" />
+                                <Card.Img variant="top" src={station.picture_url || "http://127.0.0.1:9000/test/default_station.jpg"} className="station-img" />
                                 <Card.Body>
                                     <Card.Title className="station-title">{station.title}</Card.Title>
                                     <Card.Text className="station-description">{station.description}</Card.Text>
