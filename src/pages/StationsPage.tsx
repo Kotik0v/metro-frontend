@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Navbar from "../components/Navbar";
-import { Card, Button, Form } from "react-bootstrap";
+import { Card, Button, Form, Badge, Collapse, Container, Row, Col } from "react-bootstrap";
 
+// Определение типа для объекта станции
 interface Station {
     id: number;
     title: string;
@@ -15,13 +16,20 @@ interface Station {
     average_visits: number;
 }
 
+// Определение типа для информации о текущем черновике заявки
+interface DraftInfo {
+    draft_request_id: number | null;
+    count_stations: number;
+    stations_in_draft: Station[];
+}
+
+// Mock-данные для станций, используются при сбое загрузки данных с API
 const mockStations: Station[] = [
     {
         id: 1,
         title: "Бауманская",
         pic: "http://127.0.0.1:9000/test/1.jpg",
-        description:
-            "«Бауманская» — станция Московского метрополитена на Арбатско-Покровской линии.",
+        description: "«Бауманская» — станция Московского метрополитена на Арбатско-Покровской линии.",
         line_number: "3",
         line_name: "Арбатско-Покровская",
         line_color: "#0072BA",
@@ -31,36 +39,41 @@ const mockStations: Station[] = [
         id: 2,
         title: "Комсомольская",
         pic: "http://127.0.0.1:9000/test/2.jpg",
-        description: "станция Московского метрополитена на Кольцевой линии.",
-        line_number: "1",
-        line_name: "Сокольническая",
-        line_color: "#D41317",
-        average_visits: 49,
+        description: "«Комсомольская» — станция Московского метрополитена на Кольцевой линии.",
+        line_number: "5",
+        line_name: "Кольцевая",
+        line_color: "#8A0D0B",
+        average_visits: 105,
     },
     {
         id: 3,
         title: "Киевская",
         pic: "http://127.0.0.1:9000/test/3.jpg",
-        description: "станция Московского метрополитена на Кольцевой линии.",
-        line_number: "3",
-        line_name: "Арбатско-Покровская",
-        line_color: "#0072BA",
-        average_visits: 68,
-    },
+        description: "«Киевская» — станция Московского метрополитена на Арбатско-Покровской и Кольцевой линии.",
+        line_number: "4",
+        line_name: "Филёвская",
+        line_color: "#1EBCEF",
+        average_visits: 87,
+    }
 ];
 
 const StationsPage = () => {
-    const [stations, setStations] = useState<Station[]>(mockStations);
+    const [stations, setStations] = useState<Station[]>(mockStations); // Использование mock-данных по умолчанию
     const [search, setSearch] = useState("");
+    const [draftInfo, setDraftInfo] = useState<DraftInfo>({ draft_request_id: null, count_stations: 0, stations_in_draft: [] });
+    const [open, setOpen] = useState(false); // Состояние для управления видимостью деталей черновика
 
+    // Функция для загрузки списка станций и информации о текущей заявке
     const fetchStations = async () => {
         try {
             const response = await fetch("/api/stations/");
             if (!response.ok) throw new Error("Ошибка загрузки данных станций");
             const data = await response.json();
             setStations(data.stations);
+            setDraftInfo(data.draft_info); // Установка информации о черновике заявки
         } catch (error) {
-            setStations(mockStations);
+            console.error("Fallback to mock data due to API или network error", error);
+            setStations(mockStations); // Возврат к mock-данным при ошибке
         }
     };
 
@@ -68,6 +81,7 @@ const StationsPage = () => {
         fetchStations();
     }, []);
 
+    // Фильтрация станций по введенному тексту
     const filteredStations = stations.filter((station) =>
         station.title.toLowerCase().includes(search.toLowerCase())
     );
@@ -75,38 +89,69 @@ const StationsPage = () => {
     return (
         <div>
             <Navbar />
-            <div className="container mt-4">
+            <Container className="mt-4">
                 <Breadcrumbs path="/stations" />
                 <h1 className="mb-4">Список станций</h1>
-                <Form className="mb-4">
+                <div className="d-flex justify-content-between align-items-center mb-4">
                     <Form.Control
                         type="text"
                         placeholder="Поиск по названию..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
+                        style={{ maxWidth: "300px" }}
                     />
-                </Form>
-                <div className="row">
+                    <Button
+                        variant="outline-primary"
+                        onClick={() => setOpen(!open)}
+                        aria-controls="draft-details"
+                        aria-expanded={open}
+                        disabled={draftInfo.count_stations === 0}
+                    >
+                        Текущая заявка <Badge bg="secondary">{draftInfo.count_stations}</Badge>
+                    </Button>
+                </div>
+                <Collapse in={open}>
+                    <div id="draft-details">
+                        {draftInfo.stations_in_draft.map((station) => (
+                            <Card key={station.id} className="mb-2">
+                                <Card.Body className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <Card.Title>{station.title}</Card.Title>
+                                        <Card.Text>
+                                            {station.line_name} ({station.line_number})
+                                        </Card.Text>
+                                    </div>
+                                    <Button variant="danger" size="sm" as={Link} to={`/flow-analyses/${draftInfo.draft_request_id}/delete-station/${station.id}`}>
+                                        Удалить
+                                    </Button>
+                                </Card.Body>
+                            </Card>
+                        ))}
+                    </div>
+                </Collapse>
+                <Row>
                     {filteredStations.map((station) => (
-                        <div className="col-md-4 mb-4" key={station.id}>
-                            <Card>
-                                <Card.Img variant="top" src={station.pic} />
+                        <Col md={4} key={station.id} className="mb-4">
+                            <Card className="station-card">
+                                <Card.Img variant="top" src={station.pic || "http://127.0.0.1:9000/test/default_station.jpg"} className="station-img" />
                                 <Card.Body>
-                                    <Card.Title>{station.title}</Card.Title>
-                                    <Card.Text>{station.description}</Card.Text>
-                                    <Button
-                                        as={Link}
-                                        to={`/stations/${station.id}`}
-                                        variant="primary"
-                                    >
+                                    <Card.Title className="station-title">{station.title}</Card.Title>
+                                    <Card.Text className="station-description">{station.description}</Card.Text>
+                                    <div className="station-line">
+                                        <div className="line-circle" style={{ backgroundColor: station.line_color }}>
+                                            {station.line_number}
+                                        </div>
+                                        <span className="line-name">{station.line_name}</span>
+                                    </div>
+                                    <Button variant="primary" as={Link} to={`/stations/${station.id}`} className="more-button">
                                         Подробнее
                                     </Button>
                                 </Card.Body>
                             </Card>
-                        </div>
+                        </Col>
                     ))}
-                </div>
-            </div>
+                </Row>
+            </Container>
         </div>
     );
 };
