@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { setStations, setInputValue, setCurrentFlowAnalysisId, setCurrentCount } from '../redux/stationsSlice';
+import { setStations, setInputValue, setCurrentCount } from '../redux/stationsSlice';
 import { Link } from "react-router-dom";
 import Breadcrumbs from "../components/Breadcrumbs";
 import Navbar from "../components/Navbar";
@@ -87,7 +87,7 @@ const mockResponse = {
 };
 
 const StationsPage = () => {
-    const { stations, inputValue, currentFlowanalysisId, currentCount } = useSelector((state) => state.stations);
+    const { stations, inputValue, currentCount } = useSelector((state) => state.stations);
     const dispatch = useDispatch();
     const [open, setOpen] = useState(false);
 
