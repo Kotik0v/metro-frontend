@@ -11,18 +11,19 @@ const Breadcrumbs = ({ path }: { path: string }) => {
 
     return (
         <Breadcrumb>
-            <Breadcrumb.Item as={Link} to="/">
+            <Breadcrumb.Item as={Link} to="/BMSTU_RIP_frontend/">
                 Главная
             </Breadcrumb.Item>
             {segments.map((segment, index) => {
                 const fullPath = `/${segments.slice(0, index + 1).join("/")}`;
                 const isLast = index === segments.length - 1;
-                return isLast ? (
-                    <Breadcrumb.Item active key={index}>
-                        <span>{paths[segment] || segment}</span>
-                    </Breadcrumb.Item>
-                ) : (
-                    <Breadcrumb.Item as={Link} to={fullPath} key={index}>
+                return (
+                    <Breadcrumb.Item
+                        key={index}
+                        active={isLast}
+                        linkAs={isLast ? undefined : Link}
+                        linkProps={isLast ? {} : { to: fullPath }}
+                    >
                         {paths[segment] || segment}
                     </Breadcrumb.Item>
                 );

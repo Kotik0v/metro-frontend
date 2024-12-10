@@ -1,0 +1,15 @@
+{
+  "name": "Аналитика метро",
+  "short_name": "Аналитика метро",
+  "start_url": "/BMSTU_RIP_frontend",
+  "display": "standalone",
+  "background_color": "#fdfdfd",
+  "theme_color": "#db4938",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/BMSTU_RIP_frontend/icons/metro_logo.png",
+      "type": "image/png", "sizes": "512x295"
+    }
+  ]
+}
