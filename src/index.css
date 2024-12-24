@@ -1,295 +1,267 @@
+/* Общие стили */
 body {
   font-family: 'Roboto', sans-serif;
   background-color: #f8f9fa;
-}
-
-.home-container {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-.home-main {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 20px;
-  position: relative;
-}
-
-.home-main::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: url('http://127.0.0.1:9000/test/background.jpg') no-repeat center center;
-  background-size: cover;
-  opacity: 0.5;
-  z-index: -1;
-}
-
-.home-title {
-  font-size: 36px;
-  font-weight: 700;
-  color: #007bff;
-}
-
-.home-description {
-  font-size: 18px;
-  color: #343a40;
-  margin-bottom: 20px;
-}
-
-.home-buttons a {
-  margin: 0 10px;
-}
-
-.breadcrumb {
-  margin-bottom: 20px;
+  margin: 0;
+  padding: 0;
 }
 
 .container {
   max-width: 900px;
   margin: auto;
   padding: 20px;
-}
-
-h1, h2 {
-  color: #343a40;
-}
-
-.station-details .line-circle {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  margin-right: 10px;
-  color: #fff;
   text-align: center;
 }
 
-.line-circle {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  color: #FFFFFF;
-  font-size: 18px;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-right: 10px;
-}
-
-.card-body {
-  background-color: #f8f9fa;
-  border-radius: 0.25rem;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.card-title {
-  font-size: 24px;
+h1, h2, h3 {
   color: #343a40;
 }
 
-header {
-  height: 40px;
-  background-color: #FFFFFF;
+input, button {
+  margin: 10px 0;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.error-message {
+  color: #ff0000;
+}
+
+.success-message {
+  color: #00a000;
+}
+
+a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Navbar стили */
+.navbar {
+  background-color: #ffffff;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
-}
-
-.header-content {
-  display: flex;
   align-items: center;
-  height: 100%;
-  margin-left: 20px;
-}
-
-.header-logo img {
-  height: 40px;
-}
-
-.header-title {
-  margin-left: 20px;
-  font-size: 28px;
-  color: #000000;
-  font-weight: bold;
-}
-
-.search-form {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 20px;
-  margin-bottom: 20px;
-  width: 100%;
-}
-
-.search-input {
-  width: 70%;
-  height: 40px;
-  border-radius: 8px;
-  border: 1px solid #B3B3B3;
-  padding: 0 15px;
-  font-size: 14px;
-}
-
-.request-button {
-  background-color: #D4212D;
-  border: none;
-  color: #FFFFFF;
   padding: 10px 20px;
-  margin-left: 20px;
-  border-radius: 8px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  font-weight: bold;
 }
 
-.request-circle {
-  background-color: #FFFFFF;
-  color: #D4212D;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
+.navbar-logo img {
+  height: 50px;
+  width: auto;
+}
+
+.navbar-links {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.navbar-menu {
+  display: none;
+  font-size: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #343a40ff;
+}
+
+.navbar-dropdown {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  position: absolute;
+  top: 60px;
+  right: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  z-index: 1;
+}
+
+@media (max-width: 768px) {
+  .navbar-links {
+    display: none;
+  }
+
+  .navbar-menu {
+    display: block;
+  }
+
+  .navbar-dropdown {
+    display: flex;
+  }
+}
+
+/* Breadcrumbs стили */
+.breadcrumbs {
   display: flex;
   justify-content: center;
-  align-items: center;
-  margin-left: 10px;
-  font-size: 14px;
-  font-weight: bold;
+  margin-bottom: 20px;
+  color: #343a40;
 }
 
-.station-card {
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  overflow: hidden;
+.breadcrumbs a {
+  color: #007bff;
+}
+
+.breadcrumbs span {
+  margin: 0 5px;
+}
+
+/* Стили для страниц */
+.home-page, .login-page, .register-page, .profile-page, .station-details-page, .stations-page {
+  text-align: center;
+}
+
+.page-logo, .home-logo {
+  width: 100px;
+  margin-bottom: 20px;
+}
+
+.profile-form, .login-form, .register-form {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 15px;
-  height: 350px;
 }
 
-.station-img {
-  width: calc(100% - 30px);
-  height: 60%;
-  object-fit: cover;
-  margin-bottom: 15px;
-}
-
-.station-title {
-  font-size: 18px;
-  color: #000000;
-  margin-top: 10px;
-  margin-bottom: 5px;
-  font-weight: bold;
-}
-
-.station-description {
-  font-size: 14px;
-  color: #666666;
-  text-align: center;
-}
-
-.more-button {
-  background-color: #FFFFFF;
-  color: #000000;
-  border: 2px solid #000000;
+.station-details-page .station-image, .stations-page .station-image {
+  width: 100%;
+  max-width: 300px;
+  margin: auto;
   border-radius: 8px;
-  padding: 5px 10px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: bold;
-  text-align: center;
-  display: inline-block;
-  text-decoration: none;
-  margin-top: 10px;
 }
 
-.more-button:hover {
-  background-color: #f0f0f0;
-  color: #000000;
+.stations-page .stations-list {
+  list-style: none;
+  padding: 0;
 }
 
-.line-banner {
-  background-color: var(--line-color, #0072BA);
-  color: #FFFFFF;
-  border-radius: 8px 8px 0 0;
-  padding: 10px 20px;
+.stations-page .station-item {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
+  padding: 10px;
 }
 
-.station-details-title {
-  font-size: 24px;
-  color: #FFFFFF;
-  margin-left: 15px;
-  font-weight: bold;
+.stations-page .station-info {
+  text-align: left;
+  margin-left: 20px;
 }
 
-.station-details .line-number {
-  font-size: 32px;
-  font-weight: 600;
-  color: #FFFFFF;
-  margin-right: 10px;
+.flow-analysis-page .flow-analysis-details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
-.station-large-img {
-  width: 50%;
-  min-height: 300px;
+.flow-analysis-page .stations-list {
+  list-style: none;
+  padding: 0;
+  margin: 20px 0;
+}
+
+.flow-analysis-page .station-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   margin-bottom: 15px;
+  padding: 10px;
+}
+
+.flow-analysis-page .station-order {
+  width: 30px;
+  text-align: center;
+}
+
+.flow-analysis-page .station-remove {
+  cursor: pointer;
+  color: #ff0000;
+}
+
+.flow-analysis-link {
+  margin-top: 20px;
+}
+
+.form-button {
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: #fff;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+.form-button:hover {
+  background-color: #218838;
+}
+
+.home-page {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.carousel-background {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.carousel-background .carousel {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.carousel-background .carousel-item img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  filter: brightness(0.7); /* Затемнение */
 }
 
-.station-info, .station-attendance {
-  background-color: #FFFFFF;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  padding: 15px;
-  margin-top: 15px;
+.overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  text-align: center;
+  z-index: 1;
 }
 
-.info-title {
-  font-size: 18px;
-  color: #000000;
-  font-weight: bold;
-  margin-bottom: 10px;
+.home-title {
+  font-size: 3rem;
+  color: #ffffff;
 }
 
-.info-text {
-  font-size: 14px;
-  color: #666666;
-}
-
-
-
-.attendance-title {
-  font-size: 18px;
-  color: #000000;
-  font-weight: bold;
-  margin-bottom: 10px;
-}
-
-.attendance-text {
-  font-size: 14px;
-  color: #666666;
+.home-description {
+  font-size: 1.5rem;
 }

@@ -1,18 +1,80 @@
-import { Container, Navbar, Nav, Image } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import Cookies from 'js-cookie';
+import axios from 'axios';
+import { logout } from '../redux/authSlice';
+import { RootState } from '../redux/store';
+import metroLogo from '../assets/metro_logo.png';
 
-const Header = () => (
-    <Navbar bg="light" expand="lg" style={{ boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }}>
-        <Container>
-            <Navbar.Brand as={Link} to="/">
-                <Image src="http://127.0.0.1:9000/test/metro_logo.png" height="60" alt="Metro Logo" />
-                Metro Analysis
-            </Navbar.Brand>
-            <Nav className="me-auto">
-                <Nav.Link as={Link} to="/stations">Список станций</Nav.Link>
-            </Nav>
-        </Container>
-    </Navbar>
-);
+const Navbar: React.FC = () => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const { isAuthenticated, username } = useSelector((state: RootState) => state.auth);
 
-export default Header;
+    const handleLogout = async () => {
+        try {
+            const csrfToken = Cookies.get('csrftoken');
+            await axios.post('/users/logout/', {}, {
+                headers: {
+                    'X-CSRFToken': csrfToken || '',
+                    'Content-Type': 'application/json'
+                }
+            });
+            dispatch(logout());
+            navigate('/login');
+        } catch (error) {
+            console.error('Ошибка при выходе:', error);
+        }
+    };
+
+    const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
+
+    return (
+        <header className="navbar">
+            <div className="navbar-logo">
+                <Link to="/">
+                    <img src={metroLogo} alt="Metro Logo" />
+                </Link>
+            </div>
+            <nav className="navbar-links">
+                <Link to="/stations">Список станций</Link>
+                {isAuthenticated ? (
+                    <>
+                        <Link to="/flow-analysis">Заявка</Link>
+                        <Link to="/profile">{username}</Link>
+                        <button onClick={handleLogout}>Выйти</button>
+                    </>
+                ) : (
+                    <>
+                        <Link to="/login">Вход</Link>
+                        <Link to="/register">Регистрация</Link>
+                    </>
+                )}
+            </nav>
+            <button className="navbar-menu" onClick={toggleMenu}>
+                ☰
+            </button>
+            {isMenuOpen && (
+                <div className="navbar-dropdown">
+                    <Link to="/stations" onClick={toggleMenu}>Список станций</Link>
+                    {isAuthenticated ? (
+                        <>
+                            <Link to="/flow-analysis" onClick={toggleMenu}>Заявка</Link>
+                            <Link to="/profile" onClick={toggleMenu}>{username}</Link>
+                            <button onClick={handleLogout}>Выйти</button>
+                        </>
+                    ) : (
+                        <>
+                            <Link to="/login" onClick={toggleMenu}>Вход</Link>
+                            <Link to="/register" onClick={toggleMenu}>Регистрация</Link>
+                        </>
+                    )}
+                </div>
+            )}
+        </header>
+    );
+};
+
+export default Navbar;

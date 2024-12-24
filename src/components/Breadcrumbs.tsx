@@ -1,34 +1,38 @@
-import { Link } from "react-router-dom";
-import { Breadcrumb } from "react-bootstrap";
+import React from 'react';
+import { Link } from 'react-router-dom';
 
-const paths: { [key: string]: string } = {
-    stations: "Список станций",
-    "flow-analysis": "Заявка",
+interface BreadcrumbsProps {
+    path: string;
+}
+
+interface PathNames {
+    [key: string]: string;
+}
+
+const pathNames: PathNames = {
+    'stations': 'Список станций',
+    'flow-analysis': 'Заявка'
 };
 
-const Breadcrumbs = ({ path }: { path: string }) => {
-    const segments = path.split("/").filter(Boolean);
+const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ path }) => {
+    const paths = path.split('/').filter(Boolean);
 
     return (
-        <Breadcrumb>
-            <Breadcrumb.Item as={Link} to="/BMSTU_RIP_frontend/">
-                Главная
-            </Breadcrumb.Item>
-            {segments.map((segment, index) => {
-                const fullPath = `/${segments.slice(0, index + 1).join("/")}`;
-                const isLast = index === segments.length - 1;
-                return (
-                    <Breadcrumb.Item
-                        key={index}
-                        active={isLast}
-                        linkAs={isLast ? undefined : Link}
-                        linkProps={isLast ? {} : { to: fullPath }}
-                    >
-                        {paths[segment] || segment}
-                    </Breadcrumb.Item>
-                );
-            })}
-        </Breadcrumb>
+        <nav className="breadcrumbs">
+            <Link to="/">Главная</Link>
+            {paths.map((segment, index) => (
+                <React.Fragment key={index}>
+                    <span> / </span>
+                    {index === paths.length - 1 ? (
+                        <span>{pathNames[segment] || segment}</span>
+                    ) : (
+                        <Link to={`/${paths.slice(0, index + 1).join('/')}`}>
+                            {pathNames[segment] || segment}
+                        </Link>
+                    )}
+                </React.Fragment>
+            ))}
+        </nav>
     );
 };
 
