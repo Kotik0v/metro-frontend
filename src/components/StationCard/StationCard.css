@@ -1,0 +1,68 @@
+.part-card {
+    font-family: "Inter", "Source Sans Pro", "Helvetica";
+    display: flex;
+    align-items: center;
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    background-color: white;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 100%;
+    margin: 0 auto;
+}
+
+.part-photo {
+    width: 50%;
+    height: auto;
+    object-fit: cover;
+}
+
+.part-details a {
+    text-decoration: none;
+}
+
+.part-details h5 {
+    color: black;
+    text-decoration: none;
+}
+
+.part-details p {
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.card-title {
+    font-size: 22px;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+.card-text {
+    margin-bottom: 8px;
+}
+
+.add-section {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+.min-width-button {
+    min-width: 100px;
+}
+
+
+@media (max-width: 675px) {
+    .part-card  {
+        flex-direction: column;
+        align-items: center;
+        gap: 20px 0
+    }
+
+    .part-photo, .part-details {
+        width: 100%;
+    }
+}

@@ -1,23 +1,23 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import App from './App';
-import './index.css';
-import { Provider } from 'react-redux';
-import store from './redux/store';
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import './index.css'
+import App from './App.tsx'
+import { Provider } from "react-redux";
+import {store} from './store/store.ts';
 
-if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-        navigator.serviceWorker
-            .register('/metro-frontend/serviceWorker.js')
-            .then((res) => console.log('Service Worker Registered', res))
-            .catch((err) => console.log('Service Worker Not Registered', err));
-    });
-}
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-    <React.StrictMode>
+createRoot(document.getElementById('root')!).render(
+    <StrictMode>
         <Provider store={store}>
             <App />
         </Provider>
-    </React.StrictMode>
-);
+    </StrictMode>,
+)
+
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker
+            .register("/metro-frontend/serviceWorker.js")
+            .then(() => console.log('Service worker registered'))
+            .catch((err) => console.log('Service worker not registered', err));
+    });
+}

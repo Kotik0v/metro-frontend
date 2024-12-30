@@ -1,0 +1,38 @@
+.custom-footer {
+    font-family: Arial, sans-serif;
+    background-color: #212539;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 66px;
+    color: white;
+    padding-left: 20px;
+    padding-right: 20px;
+    white-space: normal;
+}
+
+.footer-text {
+    display: none;
+}
+
+.full-text {
+    display: block;
+}
+
+@media (max-width: 675px) {
+    .custom-footer {
+        height: 45px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 330px) {
+    .full-text {
+        display: none;
+    }
+
+    .break-text {
+        display: block;
+    }
+}
