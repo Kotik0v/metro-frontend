@@ -25,7 +25,7 @@ export const BasicNavbar = () => {
         <nav className="nav">
             <div className="nav__icon">
                 <NavLink to={ROUTES.HOME} className="nav__brand">
-                    <img src={`${dest_root}/images/logo.png`} alt="Logo" height="40" />
+                    <img src={`${dest_root}/images/metro_logo.png`} alt="Logo" height="40" />
                 </NavLink>
             </div>
             <div className="nav__wrapper">

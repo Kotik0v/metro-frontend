@@ -1,23 +1,59 @@
-.shipment-part-photo {
-    max-height: 200px;
-    object-fit: cover;
-    margin-right: 60px;
+.station-card {
+    border: 1px solid #ddd;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    background-color: #f9f9f9;
 }
 
-.shipment-part-details {
+.flow-station-photo {
+    width: 120px;
+    height: auto;
+    border-radius: 6px;
+    margin-right: 15px;
+}
+
+.flow-station-details {
+    flex-grow: 1;
+}
+
+.left-station-details {
+    margin-bottom: 10px;
+}
+
+.card-title {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.card-text {
+    font-size: 14px;
+    color: #666;
+}
+
+.station-quantity-row {
     display: flex;
+    align-items: center;
     justify-content: space-between;
-    width: 100%;
-    align-items: center;
 }
 
-.shipment-quantity-row {
-    display: flex;
-    align-items: center;
-    padding-right: 20px;
-    padding-left: auto;
+.quantity-label {
+    font-size: 14px;
+    color: #666;
 }
 
 .quantity-controls {
-    padding-right: 40px;
+    margin-left: 10px;
+}
+
+.delete-button {
+    margin-left: auto;
+}
+
+.btn-outline-dark {
+    border-color: #ccc;
+    color: #333;
 }

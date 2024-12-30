@@ -1,5 +1,28 @@
 .inputField {
     display: flex;
-    padding-bottom: 15px;
-    width: 500px;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.inputField .form-control {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-right: 10px;
+}
+
+.inputField .btn {
+    padding: 6px 12px;
+    color: #fff;
+    background-color: #0275d8;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.inputField .btn-outline-dark {
+    border: 1px solid #ddd;
+    background-color: transparent;
+    color: #333;
 }

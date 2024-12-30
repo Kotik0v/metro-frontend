@@ -17,7 +17,7 @@ export const HomePage: FC = () => {
                     <Carousel.Item>
                         <img
                             className="d-block w-100"
-                            src="http://127.0.0.1:9000/test/background1.jpg"
+                            src="http://127.0.0.1:9000/test/background.jpg"
                             alt="First slide"
                         />
                     </Carousel.Item>
