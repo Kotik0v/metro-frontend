@@ -265,3 +265,52 @@ a:hover {
 .home-description {
   font-size: 1.5rem;
 }
+
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container, 
+.custom-container,
+.login-container,
+.register-container,
+.profile-container,
+.forbidden-container,
+.not-found-container {
+    padding-top: 60px; /* Высота навбара */
+}
+
+.home {
+    padding-top: 0 !important; /* Для домашней страницы отступ не нужен */
+}
+
+.container, 
+.custom-container {
+    max-width: 900px;
+    margin: auto;
+    padding: 20px;
+}
+
+/* Добавляем отступ для всех страниц, кроме домашней */
+.station-page,
+.stations-page,
+.profile-page,
+.login-page,
+.register-page,
+.forbidden-page,
+.not-found-page {
+    padding-top: 60px;
+}
+
+/* Домашняя страница уже имеет свои стили */
+.home {
+    padding-top: 0;
+}

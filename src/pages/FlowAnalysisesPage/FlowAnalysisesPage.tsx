@@ -19,14 +19,20 @@ const FlowAnalysisesPage: FC = () => {
     const [dateEnd, setDateEnd] = useState(filters.date_end);
 
     useEffect(() => {
+        console.log('FlowAnalysisesPage - Состояние аутентификации:', isAuthenticated);
         if (!isAuthenticated) {
+            console.log('FlowAnalysisesPage - Перенаправление на страницу 403');
             navigate(ROUTES.PAGE403);
+            return;
         }
-    }, [isAuthenticated, navigate]);
-
-    useEffect(() => {
-        dispatch(fetchFlowAnalyses());
-    }, [dispatch]);
+        
+        console.log('FlowAnalysisesPage - Запуск fetchFlowAnalyses');
+        dispatch(fetchFlowAnalyses())
+            .unwrap()
+            .catch((error) => {
+                console.error('FlowAnalysisesPage - Ошибка загрузки:', error);
+            });
+    }, [dispatch, isAuthenticated, navigate]);
 
     const applyFilters = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
@@ -66,6 +72,7 @@ const FlowAnalysisesPage: FC = () => {
                             value={status}
                             onChange={(e) => setStatus(e.target.value)}
                         >
+                            <option value="">Все</option>
                             <option value="draft">Черновик</option>
                             <option value="formed">Сформирован</option>
                             <option value="completed">Завершён</option>
@@ -73,7 +80,7 @@ const FlowAnalysisesPage: FC = () => {
                             <option value="deleted">Удалён</option>
                         </select>
                     </div>
-                    <div className="flow-analysis-form-group">
+                    <div className="flow-analysis-form-group" >
                         <button type="submit" className="btn btn-outline-dark">
                             Применить
                         </button>
@@ -82,50 +89,43 @@ const FlowAnalysisesPage: FC = () => {
 
                 <div className="table-container">
                     {flowAnalyses.length > 0 ? (
-                        <table className="flow-analysis-table">
-                            <thead>
-                            <tr>
-                                <th>ID Анализа</th>
-                                <th>Статус</th>
-                                <th>Дата создания</th>
-                                <th>Дата формирования</th>
-                                <th>Модератор</th>
-                                <th>Детали</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {flowAnalyses.map((analysis, index) => (
-                                <tr
-                                    key={index}
-                                    onClick={() => navigate(`${ROUTES.FLOW_ANALYSES}/${analysis.id}/`)}
-                                    className="flow-analysis-row"
-                                >
-                                    <td>{analysis.id}</td>
-                                    <td>{analysis.status}</td>
-                                    <td>{new Date(analysis.created_at).toLocaleDateString()}</td>
-                                    <td>{analysis.formed_at ? new Date(analysis.formed_at).toLocaleDateString() : 'N/A'}</td>
-                                    <td>{analysis.moderator?.username || 'Не назначен'}</td>
-                                    <td>
-                                        <button
-                                            className="btn btn-sm btn-outline-primary"
-                                            onClick={(e) => {
-                                                e.stopPropagation();
-                                                navigate(`${ROUTES.FLOW_ANALYSES}/${analysis.id}/`);
-                                            }}
-                                        >
-                                            Подробнее
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                            </tbody>
-                        </table>
+                        <div className="flow-analysis-cards">
+                            <div className="flow-analysis-card header-card">
+                                <div className="card-field">
+                                    <span>ID Анализа</span>
+                                    <span>Статус</span>
+                                    <span>Дата создания</span>
+                                    <span>Дата формирования</span>
+                                    <span>Дата завершения</span>
+                                    <span>Модератор</span>
+                                    <span>Время суток</span>
+                                </div>
+                            </div>
+                            {[...flowAnalyses]
+                                .sort((a, b) => a.id - b.id)
+                                .map((analysis, index) => (
+                                    <div 
+                                        key={index} 
+                                        className="flow-analysis-card"
+                                        onClick={() => navigate(`${ROUTES.FLOW_ANALYSES}/${analysis.id}/`)}
+                                    >
+                                        <div className="card-field">
+                                            <span className="text-center">{analysis.id}</span>
+                                            <span className="text-center">{analysis.status}</span>
+                                            <span className="text-center">{new Date(analysis.created_at).toLocaleDateString()}</span>
+                                            <span className="text-center">{analysis.formed_at ? new Date(analysis.formed_at).toLocaleDateString() : 'N/A'}</span>
+                                            <span className="text-center">{analysis.completed_at ? new Date(analysis.completed_at).toLocaleDateString() : 'N/A'}</span>
+                                            <span className="text-center">{analysis.moderator?.username || 'Не назначен'}</span>
+                                            <span className="text-center">{analysis.day_time || 'Не указано'}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                        </div>
                     ) : (
                         <h3 className="text-center">Анализы потоков не найдены</h3>
                     )}
                 </div>
             </div>
-            <Footer />
         </div>
     );
 };

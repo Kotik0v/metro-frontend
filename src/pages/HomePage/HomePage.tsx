@@ -1,6 +1,7 @@
 import { FC, useEffect } from "react";
 import { Carousel } from 'react-bootstrap';
 import "./HomePage.css";
+import  Footer  from "../../components/footer/footer";
 
 export const HomePage: FC = () => {
     useEffect(() => {
@@ -44,14 +45,17 @@ export const HomePage: FC = () => {
                     Исследуйте и анализируйте потоки пассажиров в метро.
                 </p>
             </div>
-            <footer className="home-page-custom-footer">
-        <span className="footer-text full-text">
-          2024 Metro Analysis. Все права защищены.
-        </span>
-                <span className="footer-text break-text">
-          2024 Metro Analysis.<br />Все права защищены.
-        </span>
-            </footer>
+            <Footer style={{ 
+                position: 'absolute',
+                bottom: 0, 
+                width: '100%',
+                backgroundColor: 'rgba(0, 0, 0, 0.5)',
+                color: '#fff',
+                height: '60px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+            }} />
         </div>
     );
 };

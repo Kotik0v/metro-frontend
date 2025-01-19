@@ -71,3 +71,9 @@ export type T_StationsListResponse = {
         stations_in_draft: T_FlowAnalysisStation[];
     };
 };
+
+export interface DraftStation {
+    order: number;
+    station: T_Station;
+    flow: number | null;
+}

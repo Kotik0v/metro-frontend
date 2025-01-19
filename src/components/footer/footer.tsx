@@ -1,14 +1,16 @@
+import { FC } from 'react';
 import './footer.css';
 
-const Footer = () => {
+interface FooterProps {
+    style?: React.CSSProperties;
+}
+
+const Footer: FC<FooterProps> = ({ style }) => {
     return (
-        <footer className="custom-footer">
-      <span className="footer-text full-text">
-        2024 Metro Analysis. Все права защищены.
-      </span>
-            <span className="footer-text break-text">
-        2024 Metro Analysis.<br />Все права защищены.
-      </span>
+        <footer className="footer" style={style}>
+            <div className="footer-content">
+                <p>© 2024 Metro Analysis. Все права защищены.</p>
+            </div>
         </footer>
     );
 };

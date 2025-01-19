@@ -1,6 +1,82 @@
 .station-page {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    padding: 1rem 0;
+    
+}
+
+.station-details {
+    margin-top: 1rem;
+}
+
+.station-image-wrapper {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.station-detail-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    aspect-ratio: 16/9;
+}
+
+.station-info-card {
+    margin-top: 2rem;
+}
+
+/* Общий стиль для блоков описания и посещаемости */
+.station-description,
+.station-stats {
+    background-color: #f8f9fa;
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+}
+
+.station-description h3,
+.station-stats h3 {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 1rem;
+}
+
+.station-description p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #444;
+    margin: 0;
+}
+
+.visits-count {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+}
+
+.text-muted {
+    color: #666;
+    margin: 0.5rem 0 0 0;
+}
+
+/* Стиль для хлебных крошек */
+.crumbs {
+    text-align: left;
+    margin-bottom: 1rem;
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .station-title {
+        font-size: 2rem;
+    }
+
+    .visits-count {
+        font-size: 1.75rem;
+    }
+
+    .station-description p {
+        font-size: 1rem;
+    }
 }

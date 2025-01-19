@@ -1,6 +1,6 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { HomePage } from './pages/HomePage/HomePage';
-import PartsPage from './pages/StationsPage/StationsPage';
+import StationsPage from './pages/StationsPage/StationsPage';
 import  LoginPage  from './pages/LoginPage/LoginPage';
 import  RegisterPage  from './pages/RegisterPage/RegisterPage';
 import StationPage from './pages/StationPage/StationPage';
@@ -13,6 +13,7 @@ import FlowAnalysisPage from "./pages/FlowAnalysisPage/FlowAnalysisPage";
 import FlowAnalysisesPage from "./pages/FlowAnalysisesPage/FlowAnalysisesPage";
 import NotFoundPage from "./pages/NotFoundPage/NotFoundPage";
 import ForbiddenPage from "./pages/ForbiddenPage/ForbiddenPage";
+import Footer from './components/footer/footer';
 
 function App() {
     useEffect(() => {
@@ -33,12 +34,16 @@ function App() {
 
     return (
         <BrowserRouter>
-            <div>
+            <div style={{ 
+                minHeight: '100vh',
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
                 <BasicNavbar />
-                <div className="top">
+                <div style={{ flex: '1 0 auto' }}>
                     <Routes>
                         <Route path={ROUTES.HOME} index element={<HomePage />} />
-                        <Route path={ROUTES.STATIONS} element={<PartsPage />} />
+                        <Route path={ROUTES.STATIONS} element={<StationsPage />} />
                         <Route path={ROUTES.LOGIN} element={<LoginPage />} />
                         <Route path={ROUTES.REGISTER} element={<RegisterPage />} />
                         <Route path={`${ROUTES.STATIONS}/:id`} element={<StationPage />} />
@@ -49,6 +54,7 @@ function App() {
                         <Route path="*" element={<NotFoundPage />} />
                     </Routes>
                 </div>
+                <Footer style={{ flexShrink: 0 }} />
             </div>
         </BrowserRouter>
     );

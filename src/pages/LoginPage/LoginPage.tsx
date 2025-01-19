@@ -3,7 +3,7 @@ import './LoginPage.css';
 import { dest_root } from "../../../target_config";
 import { ROUTES } from "../../Routes";
 import { useNavigate } from 'react-router-dom';
-import {handleLogin} from "../../store/slices/userSlice";
+import { handleLogin } from "../../store/slices/userSlice";
 import { AppDispatch } from "../../store/store";
 import { useDispatch } from 'react-redux';
 
@@ -20,25 +20,19 @@ export const LoginPage: FC = () => {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
+        setError(false);
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        const data = {
-            username: formData.username,
-            password: formData.password,
-        };
-
         try {
-            const result = await dispatch(handleLogin(data));
-            if (result.type === 'login/fulfilled') {
+            const result = await dispatch(handleLogin(formData)).unwrap();
+            if (result && result.username) {
                 navigate(ROUTES.HOME);
-            } else {
-                setError(true);
             }
         } catch (err) {
             setError(true);
+            console.error('Login error:', err);
         }
     };
 

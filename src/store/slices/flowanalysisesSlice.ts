@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { T_FlowAnalysis } from "../../modules/types";
 import { api } from "../../api";
+import { RootState } from "../../store";
 
 type FlowAnalysisesState = {
     flowanalysis: T_FlowAnalysis | null;
@@ -23,29 +24,51 @@ const initialState: FlowAnalysisesState = {
 };
 
 export const getFlowAnalysisById = createAsyncThunk<T_FlowAnalysis, string>(
-    "flowanalysises/getFlowAnalysisById",
-    async (id, { rejectWithValue }) => {
+    "flowanalyses/getFlowAnalysisById",
+    async (id) => {
         try {
+            console.log('getFlowAnalysisById - Запрашиваемый ID:', id);
             const response = await api.flowAnalyses.flowAnalysesRead(id);
+            console.log('getFlowAnalysisById - Ответ API:', response.data);
             return response.data;
         } catch (error) {
-            return rejectWithValue('Произошла ошибка');
+            console.error('getFlowAnalysisById - Ошибка:', error);
+            throw error;
         }
     }
 );
 
-export const fetchFlowAnalysis = createAsyncThunk<T_FlowAnalysis, string>(
+export const fetchFlowAnalysis = createAsyncThunk<void, void>(
     "flowanalysises/fetchFlowAnalysis",
-    async (id) => {
-        const response = await api.flowAnalyses.flowAnalysesRead(id);
-        return response.data;
+    async (_, { getState }) => {
+        const state = getState() as { flowanalysises: FlowAnalysisesState };
+        const flowAnalysisId = state.flowanalysises.flowanalysis?.id;
+        
+        if (flowAnalysisId) {
+            const response = await api.flowAnalyses.flowAnalysesRead(flowAnalysisId.toString());
+            dispatch(setFlowAnalysis(response.data));
+        }
     }
 );
 
-export const fetchFlowAnalyses = createAsyncThunk<T_FlowAnalysis[], void>(
-    "flowanalysises/fetchFlowAnalyses",
-    async () => {
-        const response = await api.flowAnalyses.flowAnalysesList();
+export const fetchFlowAnalyses = createAsyncThunk(
+    'flowanalyses/fetchFlowAnalyses',
+    async (_, { getState }) => {
+        const state = getState() as RootState;
+        const filters = state.flowanalysises.filters;
+        
+        const params = new URLSearchParams();
+        if (filters.status && filters.status !== 'all') {
+            params.append('status', filters.status);
+        }
+        if (filters.date_start) {
+            params.append('date_start', filters.date_start);
+        }
+        if (filters.date_end) {
+            params.append('date_end', filters.date_end);
+        }
+        
+        const response = await api.flowAnalyses.flowAnalysesList(params.toString());
         return response.data;
     }
 );
@@ -58,14 +81,32 @@ export const updateFlowAnalysis = createAsyncThunk<T_FlowAnalysis, T_FlowAnalysi
     }
 );
 
+export const fetchCurrentFlowAnalysis = createAsyncThunk<T_FlowAnalysis, string>(
+    "flowanalysises/fetchCurrentFlowAnalysis",
+    async (id) => {
+        const response = await api.flowAnalyses.flowAnalysesRead(id);
+        return response.data;
+    }
+);
+
 export const removeStationFromFlowAnalysis = createAsyncThunk<void, { stationId: string }>(
     "flowanalysises/removeStationFromFlowAnalysis",
-    async ({ stationId }, { getState }) => {
-        const state = getState() as { flowanalysises: FlowAnalysisesState };
-        const flowanalysis = state.flowanalysises.flowanalysis;
-
-        if (flowanalysis) {
-            await api.flowAnalyses.flowAnalysesDeleteStationDelete(flowanalysis.id.toString(), stationId);
+    async ({ stationId }, { getState, dispatch }) => {
+        try {
+            const state = getState() as { flowanalysises: FlowAnalysisesState };
+            const flowAnalysisId = state.flowanalysises.flowanalysis?.id;
+            
+            await api.flowAnalyses.flowAnalysesDeleteStationDelete(stationId);
+            
+            if (flowAnalysisId) {
+                // Обновляем данные текущего анализа
+                await dispatch(fetchCurrentFlowAnalysis(flowAnalysisId.toString()));
+                // Обновляем список станций, чтобы обновить информацию о черновике
+                await dispatch(getStationsByName(""));
+            }
+        } catch (error) {
+            console.error("Ошибка при удалении станции из анализа:", error);
+            throw error;
         }
     }
 );
@@ -100,6 +141,65 @@ export const updateFilters = createAsyncThunk<void, { status: string; date_start
     }
 );
 
+export const addStationToFlowAnalysis = createAsyncThunk<void, { stationId: string }>(
+    "flowanalysises/addStationToFlowAnalysis",
+    async ({ stationId }) => {
+        try {
+            console.log('7. Начало addStationToFlowAnalysis в slice, stationId:', stationId);
+            await api.flowAnalyses.flowAnalysesAddStationCreate(stationId);
+            console.log('8. Успешно вызван API метод');
+            await api.stations.stationsList();
+            console.log('9. Успешно обновлен список станций');
+        } catch (error) {
+            console.error("10. Ошибка в slice при добавлении станции:", error);
+            throw error;
+        }
+    }
+);
+
+export const updateStationOrder = createAsyncThunk<void, { stationId: string; order: number }>(
+    "flowanalysises/updateStationOrder",
+    async ({ stationId, order }, { getState, dispatch }) => {
+        try {
+            console.log('5. Начало updateStationOrder в slice');
+            const state = getState() as { flowanalysises: FlowAnalysisesState };
+            const flowAnalysisId = state.flowanalysises.flowanalysis?.id;
+            
+            console.log('6. flowAnalysisId:', flowAnalysisId);
+            if (flowAnalysisId) {
+                console.log('7. Вызов API метода с параметрами:', {
+                    flowAnalysisId: flowAnalysisId.toString(),
+                    stationId,
+                    order
+                });
+                await api.flowAnalyses.flowAnalysesUpdateStationUpdate(
+                    flowAnalysisId.toString(),
+                    stationId,
+                    { order }
+                );
+                console.log('8. Успешный вызов API');
+                await dispatch(fetchCurrentFlowAnalysis(flowAnalysisId.toString()));
+                console.log('9. Данные обновлены');
+            }
+        } catch (error) {
+            console.error('10. Ошибка в slice:', error);
+            throw error;
+        }
+    }
+);
+
+export const formFlowAnalysis = createAsyncThunk<void, string>(
+    "flowanalysises/formFlowAnalysis",
+    async (id) => {
+        try {
+            await api.flowAnalyses.flowAnalysesFormUpdate(id);
+        } catch (error) {
+            console.error('Error forming flow analysis:', error);
+            throw error;
+        }
+    }
+);
+
 const flowanalysisesSlice = createSlice({
     name: "flowanalysises",
     initialState,
@@ -126,6 +226,9 @@ const flowanalysisesSlice = createSlice({
             state.flowanalyses = state.flowanalyses.filter(fa => fa.id.toString() !== action.meta.arg);
         });
         builder.addCase(getFlowAnalysisById.fulfilled, (state, action: PayloadAction<T_FlowAnalysis>) => {
+            state.flowanalysis = action.payload;
+        });
+        builder.addCase(fetchCurrentFlowAnalysis.fulfilled, (state, action) => {
             state.flowanalysis = action.payload;
         });
     }

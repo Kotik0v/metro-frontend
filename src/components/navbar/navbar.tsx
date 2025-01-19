@@ -2,23 +2,40 @@ import { NavLink } from 'react-router-dom';
 import { ROUTES } from "../../Routes";
 import { dest_root } from "../../../target_config";
 import { useAppSelector, useAppDispatch } from "../../store/store.ts";
-import { handleLogout } from "../../store/slices/userSlice.ts";
+import { handleLogout, checkSession } from "../../store/slices/userSlice.ts";
 import { useNavigate } from 'react-router-dom';
 import './navbar.css';
+import { useState, useEffect } from 'react';
 
 export const BasicNavbar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const isAuthenticated = useAppSelector((state) => state.user.is_authenticated);
-    const username = useAppSelector((state) => {
-        return state.user.username;
-    });
+    const username = useAppSelector((state) => state.user.username);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+    useEffect(() => {
+        dispatch(checkSession())
+            .unwrap()
+            .catch((error) => {
+                console.error('Ошибка при проверке сессии:', error);
+                // Просто логируем ошибку, не вызываем logout
+            });
+    }, [dispatch]);
 
-    const logout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
-        e.preventDefault();
-        await dispatch(handleLogout());
-        navigate(ROUTES.HOME);
+    const logout = async () => {
+        try {
+            console.log('Начало процесса выхода');
+            await dispatch(handleLogout()).unwrap();
+            console.log('Успешный выход');
+            navigate(ROUTES.HOME);
+        } catch (error) {
+            console.error('Ошибка при выходе:', error);
+        }
+    };
+
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
     };
 
     return (
@@ -28,83 +45,47 @@ export const BasicNavbar = () => {
                     <img src={`${dest_root}/images/metro_logo.png`} alt="Logo" height="40" />
                 </NavLink>
             </div>
-            <div className="nav__wrapper">
-                <div className="nav__links">
-                    <NavLink to={ROUTES.HOME} className="nav__link" end>
-                        Главная
-                    </NavLink>
-                    <NavLink to={ROUTES.STATIONS} className="nav__link" end>
-                        Станции
-                    </NavLink>
+            
+            <button className="nav__burger" onClick={toggleMenu}>
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
 
-                    {isAuthenticated ? (
-                        <>
-                            <div className="nav-item">
-                                <NavLink  to={`${ROUTES.FLOW_ANALYSES}`} className="nav__link">
-                                    Анализы
-                                </NavLink>
-                            </div>
-                            <div className="nav-item">
-                                <NavLink  to={ROUTES.PROFILE} className="nav__link">
-                                    {username}
-                                </NavLink>
-                            </div>
-                            <a href={ROUTES.HOME} className="nav__link" onClick={logout}>
-                                Выйти
-                            </a>
-                        </>
-                    ) : (
-                        <>
-                            <NavLink to={ROUTES.LOGIN} className="nav__link" end>
-                                Войти
-                            </NavLink>
-                            <NavLink to={ROUTES.REGISTER} className="nav__link" end>
-                                Регистрация
-                            </NavLink>
-                        </>
-                    )}
-                </div>
-                <div
-                    className="nav__mobile-wrapper"
-                    onClick={(event) => event.currentTarget.classList.toggle('active')}
-                >
-                    <div className="nav__mobile-target" />
-                    <div className="nav__mobile-menu">
-                        <NavLink to={ROUTES.HOME} className="nav__link" end>
-                            Главная
-                        </NavLink>
-                        <NavLink to={ROUTES.STATIONS} className="nav__link" end>
-                            Станции
-                        </NavLink>
+            <div className={`nav__links ${isMenuOpen ? 'active' : ''}`}>
+                <NavLink to={ROUTES.HOME} className="nav__link" end>
+                    Главная
+                </NavLink>
+                <NavLink to={ROUTES.STATIONS} className="nav__link" end>
+                    Станции
+                </NavLink>
 
-                        {isAuthenticated ? (
-                            <>
-                                <div className="nav-item">
-                                    <NavLink  to={`${ROUTES.FLOW_ANALYSES}`} className="nav__link">
-                                        Анализы
-                                    </NavLink>
-                                </div>
-                                <div className="nav-item">
-                                    <NavLink  to={ROUTES.PROFILE} className="nav__link">
-                                        {username}
-                                    </NavLink>
-                                </div>
-                                <a href={ROUTES.HOME} className="nav__link" onClick={logout}>
-                                    Выйти
-                                </a>
-                            </>
-                        ) : (
-                            <>
-                                <NavLink to={ROUTES.LOGIN} className="nav__link" end>
-                                    Войти
-                                </NavLink>
-                                <NavLink to={ROUTES.REGISTER} className="nav__link" end>
-                                    Регистрация
-                                </NavLink>
-                            </>
-                        )}
-                    </div>
-                </div>
+                {isAuthenticated ? (
+                    <>
+                        <div className="nav-item">
+                            <NavLink  to={`${ROUTES.FLOW_ANALYSES}`} className="nav__link">
+                                Анализы
+                            </NavLink>
+                        </div>
+                        <div className="nav-item">
+                            <NavLink  to={ROUTES.PROFILE} className="nav__link">
+                                {username}
+                            </NavLink>
+                        </div>
+                        <a href={ROUTES.HOME} className="nav__link" onClick={logout}>
+                            Выйти
+                        </a>
+                    </>
+                ) : (
+                    <>
+                        <NavLink to={ROUTES.LOGIN} className="nav__link" end>
+                            Войти
+                        </NavLink>
+                        <NavLink to={ROUTES.REGISTER} className="nav__link" end>
+                            Регистрация
+                        </NavLink>
+                    </>
+                )}
             </div>
         </nav>
     );

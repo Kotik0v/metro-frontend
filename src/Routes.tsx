@@ -18,7 +18,7 @@ export const ROUTE_LABELS: { [key in RouteKeyType]: string } = {
     LOGIN: "Аутентификация",
     REGISTER: "Регистрация",
     PROFILE: "Профиль",
-    FLOW_ANALYSES: "Анализы потоков",
+    FLOW_ANALYSES: "Анализы потока",
     PAGE403: "Доступ запрещен",
     PAGE404: "Страница не найдена"
 };

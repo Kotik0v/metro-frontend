@@ -1,13 +1,18 @@
 .home {
     position: relative;
-    height: 100vh;
+    min-height: 100vh;
     background-color: #eee;
+    padding-top: 60px;
+    display: flex;
+    flex-direction: column;
 }
 
 .carousel-container {
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 60px);
     overflow: hidden;
+    position: relative;
+    z-index: 1;
 }
 
 .d-block {
@@ -31,11 +36,12 @@
     transform: translate(-50%, -50%);
     text-align: center;
     color: #fff;
+    z-index: 2;
 }
 
 .content h1 {
     font-size: 48px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 
 .content p {
@@ -50,4 +56,46 @@
     padding: 10px 0;
     background-color: rgba(0, 0, 0, 0.5);
     color: #fff;
+}
+
+.carousel-item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.carousel {
+    height: 100%;
+}
+
+.carousel-inner {
+    height: 100%;
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+}
+
+.carousel-caption {
+    background-color: rgba(0, 0, 0, 0.5);
+    padding: 20px;
+    border-radius: 10px;
+}
+
+/* Медиа-запрос для мобильных устройств */
+@media (max-width: 768px) {
+    .carousel-container {
+        height: calc(100vh - 120px);
+    }
 }

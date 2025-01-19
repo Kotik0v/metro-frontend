@@ -2,7 +2,8 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 50px 10px;
+    min-height: 100vh;
+    padding: 60px 10px 50px;
 }
 
 .register-card {
@@ -46,7 +47,7 @@
     width: 100%;
     padding: 10px;
     border: 1px solid #ccc;
-    border-radius: 4px;
+    border-radius: 8px;
 }
 
 .error-message {

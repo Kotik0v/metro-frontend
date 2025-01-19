@@ -1,59 +1,118 @@
-.station-card {
+.flow-analysis-card {
+    display: flex;
+    align-items: center;
+    background: white;
     border: 1px solid #ddd;
-    padding: 15px;
     border-radius: 8px;
-    margin-bottom: 20px;
+    padding: 15px;
+    margin-bottom: 15px;
+    gap: 20px;
+}
+
+.order-section {
+    width: 60px;
+    flex-shrink: 0;
+}
+
+.order-input {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.station-image-container {
+    width: 180px;
+    height: 100px;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.station-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.station-info {
     display: flex;
-    align-items: center;
-    background-color: #f9f9f9;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    flex: 1;
 }
 
-.flow-station-photo {
-    width: 120px;
-    height: auto;
-    border-radius: 6px;
-    margin-right: 15px;
-}
-
-.flow-station-details {
-    flex-grow: 1;
-}
-
-.left-station-details {
-    margin-bottom: 10px;
-}
-
-.card-title {
-    font-size: 18px;
+.station-title {
+    font-size: 1.1rem;
+    margin: 0;
     color: #333;
-    margin-bottom: 5px;
 }
 
-.card-text {
-    font-size: 14px;
-    color: #666;
-}
-
-.station-quantity-row {
+.station-line-info {
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    gap: 8px;
 }
 
-.quantity-label {
-    font-size: 14px;
+.line-color-indicator {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 12px;
+}
+
+.visits-info {
+    white-space: nowrap;
     color: #666;
-}
-
-.quantity-controls {
-    margin-left: 10px;
-}
-
-.delete-button {
+    flex-shrink: 0;
     margin-left: auto;
 }
 
-.btn-outline-dark {
-    border-color: #ccc;
-    color: #333;
+.remove-station-btn {
+    padding: 8px 16px;
+    background-color: white;
+    border: 2px solid #dc3545;
+    color: #dc3545;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
+    flex-shrink: 0;
+}
+
+.remove-station-btn:hover {
+    background-color: #dc3545;
+    color: white;
+}
+
+@media (max-width: 768px) {
+    .flow-analysis-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .station-image-container {
+        width: 100%;
+        height: 200px;
+    }
+
+    .station-info {
+        width: 100%;
+    }
+
+    .visits-info {
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .remove-station-btn {
+        width: 100%;
+        margin-top: 10px;
+    }
 }
